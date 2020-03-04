@@ -258,7 +258,7 @@ private:
             &&  !sum.Get_extra_byte_length_pair(msg_id, crc_byte_len_pair, mavlink::sph::Extension::Get())) {
             std::lock_guard<std::mutex> stats_lock(stats_mutex);
             stats[mavlink::SYSTEM_ID_ANY].unknown_id++;
-            // LOG_DEBUG("Unknown Mavlink message id: %d (%X)", msg_id, msg_id);
+            LOG_DEBUG("Unknown Mavlink message id: %d system id: %d component id: %d)", msg_id, system_id, component_id);
             return false;
         }
 
@@ -289,6 +289,7 @@ private:
             }
             return true;
         } else {
+            LOG_DEBUG("Invalid Mavlink message id: %d system id: %d component id: %d)", msg_id, system_id, component_id);
             if (cksum_ok) {
                 stats[system_id].bad_length++;
                 stats[mavlink::SYSTEM_ID_ANY].bad_length++;
